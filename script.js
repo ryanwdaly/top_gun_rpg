@@ -1,63 +1,94 @@
 $(document).ready(function() {
-    var obi_wan = {
-        name: 'Obi-Wan Kenobi',
-        img_file: 'assets/images/obi_wan',
-        button_id: 'obi-wan-button',
+    
+    var maverick = {
+        name: 'maverick',
+        img_file: 'assets/images/maverick',
         health_points: 100,
         base_attack: 5,
         counter_attack: 5
 
     }
-    var skywalker = {
-        name: 'Luke Skywalker',
-        img_file: 'assets/images/luke_skywalker',
-        button_id: 'skywalker-button',
+    var iceman = {
+        name: 'iceman',
+        img_file: 'assets/images/iceman',
         health_points: 100,
         base_attack: 5,
         counter_attack: 5
     }
-    var darth_sidious = {
-        name: 'Dark Sidious',
-        img_file: 'assets/images/darth_sidious',
-        button_id: 'darth-sidious-button',
+    var goose = {
+        name: 'viper',
+        img_file: 'assets/images/goose',
         health_points: 100,
         base_attack: 5,
         counter_attack: 5
     }
-    var darth_maul = {
-        name: 'Darth Maul',
-        img_file: 'assets/images/darth_maul',
-        button_id: 'darth-maul-button',
+    var viper = {
+        name: 'goose',
+        img_file: 'assets/images/viper',
         health_points: 100,
         base_attack: 5,
         counter_attack: 5
     }
-
-    var character_array = [obi_wan, skywalker, darth_sidious, darth_maul];
+    var character_array = [maverick, iceman, goose, viper];
+    
 
     var player_character = null; 
     var computer_characters = [];
-    addCharacterList();
+    //Initialize
+    createCharacterIcons(character_array);
+    //
+
+    //Choose Character 
+    $("body").on("click", ".character-icons",  function() {
+        //Match IMG ID with Character object
+        for (i=0; i<character_array.length; i++){
+            if ($(this).attr("character-name") === character_array[i].name){
+                var selected_character = character_array[i];
+                break;
+            }
+        }
+        
+        //Add Slected character icon to Your character container
+        var newIcon = generateImg(selected_character)
+        newIcon.attr("status", "player-character")
+        $("#player-character-container").append(newIcon);
+
+        //add nonselected character icons to enemies container
+        character_array.forEach(function(character) {
+            if (character.name != selected_character.name) {
+                newIcon = generateImg(character);
+                newIcon.attr("status", "enemy-character")
+                $("#enemies-container").append(newIcon);
+            }
+        });
+
+
+    });
+
 
 // SELECET CHARACTER BUTTON FUNCTIONS
-    $("#obi-wan-button").on('click', function(){
-        player_character = obi_wan;
-        addComputerCharacters()
+function generateImg(object) {
+    var newIcon = $("<img>");
+   
+    newIcon.attr({
+        "character-name": object.name,
+        class: "character-icons",
+        src: object.img_file + ".jpg",
+    
 
-      
     });
-    $("#skywalker-button").on("click", function () {
-        player_character = skywalker;
-        addComputerCharacters()
-    });
-    $("#darth-sidious-button").on("click", function () {
-        player_character = darth_sidious;
-        addComputerCharacters()
-    });
-    $("#darth-maul-button").on("click", function () {
-        player_character = darth_maul;
-        addComputerCharacters()
-    });
+    return newIcon;
+}
+
+function createCharacterIcons(array) {
+    
+    for (i=0; i < array.length; i++) {
+        newIcon = generateImg(array[i], "character-select-container")
+        newIcon.attr("status", "selection")
+        $("#character-select-container").append(newIcon);
+    }
+}
+
 
 // ATTACK BUTTON
     $("#attack-button").on('click', function() {
