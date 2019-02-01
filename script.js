@@ -1,12 +1,67 @@
 $(document).ready(function() {
+
+    initialize();
+    selected_character = null;
+    enemy_characters = null;
+    selected_enemy = null; 
     
+    //Click to choose a character
+    $("body").on("click", "#selection",  function() {
+        self = $(this);
+        //Match IMG ID with Character object
+        if (self.attr("id") === "selection")
+        for (i=0; i<character_array.length; i++){
+            if (self.attr("character-name") === character_array[i].name){
+                selected_character = character_array[i];
+                break;
+            }
+        }
+        
+        //Add Slected character icon to Your character container
+        var newIcon = generateImg(selected_character)
+        newIcon.attr("id", "player-character")
+        $("#player-character-container").append(newIcon);
+
+        //add nonselected character icons to enemies container
+        character_array.forEach(function(character) {
+            if (character.name != selected_character.name) {
+                newIcon = generateImg(character);
+                newIcon.attr("class", "enemy-character")
+                $("#enemies-container").append(newIcon);
+            }
+        });
+    });
+      //Select enemy to attack
+      $("body").on("click", ".enemy-character", function() {
+            var enemy_icon = generateImg();
+            enemy_icon.attr("class", "character-incons")
+            $("#fight-section-container").append(enemy_icon);
+            $("#fight-section-container").append(selected_character);
+      });
+
+
+// SELECET CHARACTER BUTTON FUNCTIONS
+
+
+
+
+// ATTACK BUTTON
+$("#attack-button").on('click', function() {
+    
+    
+});
+
+
+
+// HELPER METHODS
+function initialize() {
     var maverick = {
         name: 'maverick',
         img_file: 'assets/images/maverick',
         health_points: 100,
         base_attack: 5,
         counter_attack: 5
-
+        
     }
     var iceman = {
         name: 'iceman',
@@ -29,44 +84,15 @@ $(document).ready(function() {
         base_attack: 5,
         counter_attack: 5
     }
-    var character_array = [maverick, iceman, goose, viper];
+    character_array = [maverick, iceman, goose, viper];
     
+    for (i = 0; i < character_array.length; i++) {
+        newIcon = generateImg(character_array[i])
+        newIcon.attr("id", "selection")
+        $("#character-select-container").append(newIcon);
+    }
+}
 
-    var player_character = null; 
-    var computer_characters = [];
-    //Initialize
-    createCharacterIcons(character_array);
-    //
-
-    //Choose Character 
-    $("body").on("click", ".character-icons",  function() {
-        //Match IMG ID with Character object
-        for (i=0; i<character_array.length; i++){
-            if ($(this).attr("character-name") === character_array[i].name){
-                var selected_character = character_array[i];
-                break;
-            }
-        }
-        
-        //Add Slected character icon to Your character container
-        var newIcon = generateImg(selected_character)
-        newIcon.attr("status", "player-character")
-        $("#player-character-container").append(newIcon);
-
-        //add nonselected character icons to enemies container
-        character_array.forEach(function(character) {
-            if (character.name != selected_character.name) {
-                newIcon = generateImg(character);
-                newIcon.attr("status", "enemy-character")
-                $("#enemies-container").append(newIcon);
-            }
-        });
-
-
-    });
-
-
-// SELECET CHARACTER BUTTON FUNCTIONS
 function generateImg(object) {
     var newIcon = $("<img>");
    
@@ -74,33 +100,11 @@ function generateImg(object) {
         "character-name": object.name,
         class: "character-icons",
         src: object.img_file + ".jpg",
-    
-
     });
     return newIcon;
 }
-
-function createCharacterIcons(array) {
+function addCharacterList() {
     
-    for (i=0; i < array.length; i++) {
-        newIcon = generateImg(array[i], "character-select-container")
-        newIcon.attr("status", "selection")
-        $("#character-select-container").append(newIcon);
-    }
-}
-
-
-// ATTACK BUTTON
-    $("#attack-button").on('click', function() {
-
-      
-    });
-
-
-    
-// HELPER METHODS
-    function addCharacterList() {
-        
         for(i = 0; i < character_array.length; i++) {
             // '<img class="character-selection-img" src="' + character_array[i].img_file + '.jpg"></img>'
            
