@@ -63,15 +63,7 @@ $(document).ready(function() {
         newIcon.attr("id", "player-character")
         $("#player-character-container").append(newIcon);
         
-        //add nonselected character icons to enemies container
-        enemyCharacters.forEach(function(enemy) {
-            newIcon = generateImg(idCharacterByName(enemy));
-            newIcon.attr({
-                "class": "enemy-character",
-                "character-name": enemy
-            });
-            $("#enemies-container").append(newIcon);
-        });
+        generateEnemyIcons(enemyCharacters);
             
         //Remove character selection icons
         $("#character-select-container").remove();
@@ -121,7 +113,16 @@ $(document).ready(function() {
         
         enemyCharacter.healthPoints -= playerCharacter.baseAttack;
         if (enemyCharacter.healthPoints <= 0) {
-            alert("Won")
+            console.log("Victory!");
+            for(i = 0; i < enemyCharacters.length; i++) {
+                if (enemyCharacters[i] === selectedEnemyName) {
+                    delete enemyCharacters[i]
+
+                }
+            }
+            
+            generateEnemyIcons(enemyCharacters);
+
         } else {
             playerCharacter.healthPoints -= enemyCharacter.baseAttack
         }
@@ -135,7 +136,21 @@ $(document).ready(function() {
 });
 
 // HELPER METHODS
-
+function generateEnemyIcons(enemyCharacters) {
+    $("#enemies-container").empty();
+    $("#fight-section-container").empty();
+    $("#attack-button-container").empty();
+    console.log(enemyCharacters)
+    //add nonselected character icons to enemies container
+    enemyCharacters.forEach(function (enemy) {
+        newIcon = generateImg(idCharacterByName(enemy));
+        newIcon.attr({
+            "class": "enemy-character",
+            "character-name": enemy
+        });
+        $("#enemies-container").append(newIcon);
+    });
+}
 function idCharacterByName(name) {
     for (var key in characters) {
        if(characters[key].name === name) {
