@@ -17,14 +17,14 @@ $(document).ready(function() {
             counterAttack: 5
         },
         goose: {
-            name: 'Viper',
+            name: 'Goose',
             imgFile: 'assets/images/goose',
             healthPoints: 100,
             baseAttack: 5,
             counterAttack: 5
         },
         viper: {
-            name: 'Goose',
+            name: 'Viper',
             imgFile: 'assets/images/viper',
             healthPoints: 100,
             baseAttack: 5,
@@ -35,6 +35,7 @@ $(document).ready(function() {
     var selectedCharacterName = null;
     var enemyCharacters = [];
     var selectedEnemyName = null; 
+    var enemySelected = false;
     
     //Generate the character icons in the Character selection container
     for(var key in characters) {
@@ -59,10 +60,12 @@ $(document).ready(function() {
         
         
         //Add Slected character icon to Your character container
+        
         var newIcon = generateImg(idCharacterByName(selectedCharacterName));
         newIcon.attr("id", "player-character")
+        $("#player-character-container").append("<h2>Your Character:</h2>")
         $("#player-character-container").append(newIcon);
-        
+        $("#player-character-container").append(generateInfo(idCharacterByName(selectedCharacterName)));        
         generateEnemyIcons(enemyCharacters);
             
         //Remove character selection icons
@@ -73,7 +76,11 @@ $(document).ready(function() {
     //Select enemy to attack
     $("body").on("click", ".enemy-character", function() {
         self = $(this);
-
+        
+        if(enemySelected === true) {
+            document.getElementByClass(".enemy-character").disabled = true;
+        }
+        enemySelected = true;
         selectedEnemyName = self.attr("character-name");
 
         var enemy_icon = generateImg(idCharacterByName(selectedEnemyName));
@@ -86,7 +93,7 @@ $(document).ready(function() {
             class: "fighter-section-icons",
             id: "attacking-player"
         });
-
+        $("#fight-section-container").append("<h2>Fight Section<\h2>")
         $("#fight-section-container").append(player_icon);
   
         $("#fight-section-container").append(enemy_icon);
@@ -114,6 +121,7 @@ $(document).ready(function() {
         enemyCharacter.healthPoints -= playerCharacter.baseAttack;
         if (enemyCharacter.healthPoints <= 0) {
             console.log("Victory!");
+            enemySelected = false;
             for(i = 0; i < enemyCharacters.length; i++) {
                 if (enemyCharacters[i] === selectedEnemyName) {
                     delete enemyCharacters[i]
@@ -128,7 +136,7 @@ $(document).ready(function() {
         }
 
         if (playerCharacter.healthPoints <= 0 ) {
-            alert("lost")
+            alert("You've lost the game!")
         }
         
         
@@ -140,6 +148,7 @@ function generateEnemyIcons(enemyCharacters) {
     $("#enemies-container").empty();
     $("#fight-section-container").empty();
     $("#attack-button-container").empty();
+    $("#enemies-container").append("<h2>Enemies Available to Attack:</h2>")
     //add nonselected character icons to enemies container
     enemyCharacters.forEach(function (enemy) {
         //create div

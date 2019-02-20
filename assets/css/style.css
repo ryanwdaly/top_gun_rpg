@@ -82,4 +82,13 @@ h2 {
     .character-icons {
         width:100%;
     }
+    html {
+        width: 100%;
+    }
+    body {
+        width: 100%;
+    }
+    #main-body {
+        width: 360px;
+    }
 }
