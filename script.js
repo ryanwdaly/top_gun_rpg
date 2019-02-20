@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     characters = {
         maverick: {
-            name: 'maverick',
+            name: 'Maverick',
             imgFile: 'assets/images/maverick',
             healthPoints: 100,
             baseAttack: 50,
@@ -10,21 +10,21 @@ $(document).ready(function() {
 
         },
         iceman: {
-            name: 'iceman',
+            name: 'Iceman',
             imgFile: 'assets/images/iceman',
             healthPoints: 100,
             baseAttack: 5,
             counterAttack: 5
         },
         goose: {
-            name: 'viper',
+            name: 'Viper',
             imgFile: 'assets/images/goose',
             healthPoints: 100,
             baseAttack: 5,
             counterAttack: 5
         },
         viper: {
-            name: 'goose',
+            name: 'Goose',
             imgFile: 'assets/images/viper',
             healthPoints: 100,
             baseAttack: 5,
@@ -140,16 +140,44 @@ function generateEnemyIcons(enemyCharacters) {
     $("#enemies-container").empty();
     $("#fight-section-container").empty();
     $("#attack-button-container").empty();
-    console.log(enemyCharacters)
     //add nonselected character icons to enemies container
     enemyCharacters.forEach(function (enemy) {
-        newIcon = generateImg(idCharacterByName(enemy));
+        //create div
+        var newDiv = $("<div>");
+        newDiv.attr("class", "enemy-div");
+        newDiv.attr("id", enemy + "-div");
+        var characterObj = idCharacterByName(enemy);
+        var newIcon = generateImg(characterObj);
         newIcon.attr({
             "class": "enemy-character",
-            "character-name": enemy
+            "character-name": enemy,
+            "id": enemy + "-img"
         });
-        $("#enemies-container").append(newIcon);
+        var newP = $("<p>");
+        newP.attr({
+            "class": "enemy-info"
+        });
+        // newP.text(generateInfo(name));
+        $("#enemies-container").append(newDiv);
+        $("#" + enemy + "-div").append(newIcon);
+        // $("#" + enemy + "-div").append(newP);
+        $("#" + enemy + "-div").append((generateInfo(characterObj)));
+
     });
+}
+function generateInfo(obj) {
+
+    var newDiv = $("<p>")
+    newDiv.attr("class", "enemy-info")
+    var name = "Name: " + obj.name + '<br>';
+    var health = "Health: " + obj.healthPoints + "<br>";
+    var attack = "Attack: " + obj.baseAttack;
+
+    // info = $("")
+     newDiv.html(name  + health + attack);
+     return newDiv;
+       
+    
 }
 function idCharacterByName(name) {
     for (var key in characters) {
